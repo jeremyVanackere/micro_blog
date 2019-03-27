@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+
+<body id="page-top" class="index">
+
+<?php include("includes/haut.inc.php"); ?>
+
+<div id="notif" class="" role="alert"></div>
+
+    <!-- About Section -->
+    <section>
+        <div class="container">
+            <div class="row">		
+                <form action="message.php" method="POST">
+                    <div class="col-sm-10"> 
+                        <div class="form-group">      
+							<?php 
+								if(isset($_GET['id'])) //si l'id du message est en get
+								{
+									$query="SELECT * FROM messages where id=:id"; //on récupére le message par l'id
+									$prep=$pdo->prepare($query); //on fais un prepare
+									$prep->bindValue(':id', $_GET['id']);
+									$prep->execute();
+									while($data=$prep->fetch()){ //on décotique la donnée
+										//on affiche dans un textarea le message.
+										echo "<textarea id='message' name='message' class='form-control' placeholder='Message'>".$data['contenu']."</textarea>";
+										//on ajoute l'id en valeur à un input cacher
+										echo "<input type='hidden' name='id' value=".$data['id'].">";
+									}
+								}
+								else //si l'id n'est pas GET
+								{
+									//on crée un textarea vide pour pouvoir écrire nos messages
+									echo "<textarea id='message' name='message' class='form-control' placeholder='Message'></textarea>";
+								}
+							?>
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+					<?php
+						if(!isset($_GET['id']))// si l'id du message est pas GET 
+							echo "<button type='submit' class='btn btn-success btn-lg'>Envoyer</button>"; //on affiche un button envoyer
+						else //sinon si l'id du message est GET
+							echo "<button type='submit' class='btn btn-success btn-lg'>Modifier</button>"; //on affiche un button modifier
+					?>
+                    </div>                        
+                </form>
+            </div>
+
+            <div class="row">
+			<?php 
+					$query="SELECT * FROM messages"; //on récupére tout les messages
+					$stmt=$pdo->query($query);
+					while($data=$stmt->fetch()){ //on décotique la donnée
+					
+						echo "<blockquote><p>".$data['contenu']."</p>"; // on crée un paragraphe avec le contenu du message
+						
+						echo "<footer>".$data['date']."</footer>"; //on affiche la date dans un footer
+						
+						//on crée une balise a avec un lien GET qui contien l'id du message et action modifier
+						echo "<br><a href='index.php?action=modif&id=".$data['id']."' class='btn btn-secondary'>Modifier </a>";
+						
+						//on crée une balise a avec un lien GET qui contien l'id du message et action supprimer
+						echo "<a href='message.php?action=supp&id=".$data['id']."' class='btn btn-secondary'>Supprimer </a>";
+						
+						//si l'id du user connecté est existant alors on affichele button voter avec l'id du message
+						if(isset($id)) echo "<a href='#' name='vote' data-id='".$data['id']."' class='btn btn-secondary'>vote </a>";
+						
+						//on affiche le nombre de vote
+						echo "<b id='".$data['id']."'>".$data['vote']."</b></blockquote>";
+					}
+            ?>
+
+
+                </div>
+            </div>
+        </div>
+    </section>
+	
+<script>
+$("[name=vote]").click(function(){ //quand on clique sur un element avec le l'attribut name = vote
+	event.preventDefault(); //pour pas actualiser la page 
+	
+	//on récupére l'élément cliquer
+	elementVote = $(this);
+	//on récupère le data-id de l'élément cliquer
+	id = elementVote.attr('data-id');
+	//si l'id de l'élément cliquer n'est pas vide pour si le user n'est pas connecter
+	if(id != "") 
+	{
+		//on fais une requete ajax vers vote.php
+		$.ajax({url: "vote.php", 
+			type: "GET", //en GET
+			data: "id="+id, //en data on envoie l'id du message
+		success: function(result){ //si la réponse est renvoyer avec success
+			if(result != "deja") //si la réponse n'est pas "deja"
+			{
+				$("#"+id).html(result); //on affiche la réponse qui est le nombre de vote dans l'élément avec l'id de la zone vote
+				elementVote.attr('disabled','true'); //on disabled le button 
+			}
+			else if(result == "deja") //par contre si c'est deja
+			{
+				$("#notif").removeClass(); //on supprime la class du message alert qui est caher
+				$("#notif").html("vous avez deja voter!"); //on insert un message d'alert
+				$("#notif").addClass("alert alert-danger"); //pour l'afficher on lui donne class alert sans le cacher
+				$("#notif").fadeOut(8000); //un petit fadeOut pour faire bien
+				elementVote.attr('disabled','true'); //on disabled le button 
+			}
+		}});
+	}
+	else //si le use n'est pas connecter
+		window.location.href = 'login.php'; //on redirige vers la connexion 
+});
+</script>
+
+<?php include("includes/bas.inc.php"); ?>
+
+</body>
+
+</html>
