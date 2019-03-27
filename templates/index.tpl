@@ -19,13 +19,15 @@
             <div class="row">		
                 <form action="message.php" method="POST">
                     <div class="col-sm-10"> 
-                        <div class="form-group">  
+                        <div class="form-group"> 
+						<!-- TexteArea et téléchagement --> 
 						{if $select}   
 							{while $data=$prep->fetch()}
 								<textarea id='message' name='message' class='form-control' placeholder='Message'>{$data['contenu']}</textarea>
 								<input type='hidden' name='id' value="{$data['id']}">
 							{/while}
 						{else}
+							<input type="file" id="upload" />
 							<textarea id='message' name='message' class='form-control' placeholder='Message'></textarea>
 						{/if}
                         </div>
@@ -40,6 +42,7 @@
                 </form>
             </div>
 
+			<!-- Affichage des messages -->
             <div class="row">
 				{while $data=$stmt->fetch()}
 						<blockquote><p>{$data['contenu']}</p>
@@ -59,6 +62,8 @@
             </div>
         </div>
     </section>
+
+<!-- Include du js et du footer -->
 
 {literal}
 <script src='./includes/vote.js'></script>
