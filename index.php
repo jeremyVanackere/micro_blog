@@ -5,7 +5,7 @@
  *
  * @package Example-application
  */
-require '../libs/Smarty.class.php';
+require 'smarty/libs/Smarty.class.php';
 $smarty = new Smarty;
 //$smarty->force_compile = true;
 //$smarty->caching = true;
@@ -17,7 +17,7 @@ $smarty->cache_lifetime = 120;
 include("includes/connexion.inc.php");
  //on vérifie si un user est connecter et nous donne l'id du user dans une variable $id
 include("./includes/verification.inc.php");
-$smarty->assign("emailTxt", $emailTxt, true);
+if(isset($emailTxt)) $smarty->assign("emailTxt", $emailTxt, true);
 
 if(isset($_GET['id'])) //si l'id du message est en get
 {
@@ -37,5 +37,5 @@ $stmt=$pdo->query($query);
 $smarty->assign("stmt", $stmt, true);
 
 $smarty->assign("select", $select, true);
-$smarty->assign("id", $id, true);
+if(isset($id)) $smarty->assign("id", $id, true);
 $smarty->display('index.tpl');

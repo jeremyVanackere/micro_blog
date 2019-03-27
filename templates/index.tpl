@@ -27,7 +27,7 @@
 								<input type='hidden' name='id' value="{$data['id']}">
 							{/while}
 						{else}
-							<input type="file" id="upload" />
+							<input type="file" id="upload" name="upload" enctype="multipart/form-data" />
 							<textarea id='message' name='message' class='form-control' placeholder='Message'></textarea>
 						{/if}
                         </div>

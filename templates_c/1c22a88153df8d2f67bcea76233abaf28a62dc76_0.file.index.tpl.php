@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 3.1.33, created on 2019-03-27 13:27:07
+/* Smarty version 3.1.33, created on 2019-03-27 17:56:37
   from 'C:\EasyPhp\eds-www\avance\templates\index.tpl' */
 
 /* @var Smarty_Internal_Template $_smarty_tpl */
 if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   'version' => '3.1.33',
-  'unifunc' => 'content_5c9b6c1b717cb8_84622283',
+  'unifunc' => 'content_5c9bab4542d216_50095795',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     '1c22a88153df8d2f67bcea76233abaf28a62dc76' => 
     array (
       0 => 'C:\\EasyPhp\\eds-www\\avance\\templates\\index.tpl',
-      1 => 1547649003,
+      1 => 1553705494,
       2 => 'file',
     ),
   ),
@@ -22,7 +22,7 @@ if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
     'file:footer.tpl' => 1,
   ),
 ),false)) {
-function content_5c9b6c1b717cb8_84622283 (Smarty_Internal_Template $_smarty_tpl) {
+function content_5c9bab4542d216_50095795 (Smarty_Internal_Template $_smarty_tpl) {
 $_smarty_tpl->smarty->ext->configLoad->_loadConfigFile($_smarty_tpl, "test.conf", "setup", 0);
 ?>
 
@@ -48,7 +48,8 @@ $_smarty_tpl->smarty->ext->configLoad->_loadConfigFile($_smarty_tpl, "test.conf"
             <div class="row">		
                 <form action="message.php" method="POST">
                     <div class="col-sm-10"> 
-                        <div class="form-group">  
+                        <div class="form-group"> 
+						<!-- TexteArea et téléchagement --> 
 						<?php if ($_smarty_tpl->tpl_vars['select']->value) {?>   
 							<?php while ($_prefixVariable1 = $_smarty_tpl->tpl_vars['prep']->value->fetch()) {
 $_smarty_tpl->_assignInScope('data', $_prefixVariable1 ,true);?>
@@ -59,6 +60,7 @@ $_smarty_tpl->_assignInScope('data', $_prefixVariable1 ,true);?>
 							<?php }?>
 
 						<?php } else { ?>
+							<input type="file" id="upload" name="upload" enctype="multipart/form-data" />
 							<textarea id='message' name='message' class='form-control' placeholder='Message'></textarea>
 						<?php }?>
                         </div>
@@ -73,6 +75,7 @@ $_smarty_tpl->_assignInScope('data', $_prefixVariable1 ,true);?>
                 </form>
             </div>
 
+			<!-- Affichage des messages -->
             <div class="row">
 				<?php while ($_prefixVariable2 = $_smarty_tpl->tpl_vars['stmt']->value->fetch()) {
 $_smarty_tpl->_assignInScope('data', $_prefixVariable2 ,true);?>
@@ -101,6 +104,8 @@ $_smarty_tpl->_assignInScope('data', $_prefixVariable2 ,true);?>
             </div>
         </div>
     </section>
+
+<!-- Include du js et du footer -->
 
 
 <?php echo '<script'; ?>
